@@ -1,7 +1,17 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.idea/
 # Built application files
 *.apk
 *.ap_
-hello.txt
+
 # Files for the ART/Dalvik VM
 *.dex
 
@@ -37,7 +47,6 @@ captures/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
-.idea/dictionaries
 .idea/libraries
 
 # Keystore files
