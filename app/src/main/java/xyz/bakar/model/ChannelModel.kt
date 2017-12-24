@@ -18,7 +18,7 @@ class ChannelModel {
     }
 
     fun toHashMap(): HashMap<String, Any> {
-        var map = HashMap<String, Any>()
+        val map = HashMap<String, Any>()
         map.put("id", id)
         map.put("name", name)
         map.put("userAccess", userAccess)
@@ -29,7 +29,7 @@ class ChannelModel {
         return map
     }
 
-    fun fromHashMap(map: HashMap<String, Any>): ChannelModel {
+    fun fromHashMap(map: MutableMap<String, Any>): ChannelModel {
         this.id = map["id"] as String? ?: ""
         this.name = map["name"] as String? ?: ""
         this.userAccess = map["userAccess"] as HashMap<String, String>? ?: HashMap()

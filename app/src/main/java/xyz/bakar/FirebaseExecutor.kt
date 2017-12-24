@@ -3,6 +3,7 @@ package xyz.bakar
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import xyz.bakar.base.BaseExecutor
+import xyz.bakar.model.ChannelModel
 import xyz.bakar.model.UserModel
 
 /**
@@ -19,12 +20,27 @@ class FirebaseExecutor: BaseExecutor() {
         users.document(userModel.id).set(userModel.toHashMap())
     })
 
-    fun readUsers(id: String) = execute(Runnable {
+    fun readUser(id: String) = execute(Runnable {
         val users: CollectionReference = db.collection("users")
         users.document(id).get().addOnCompleteListener {
             if (it.isSuccessful) {
                 val userModel = UserModel()
                 userModel.fromHashMap(it.result.data)
+            }
+        }
+    })
+
+    fun addChannel(channelModel: ChannelModel) = execute(Runnable {
+        val channels: CollectionReference = db.collection("channels")
+        channels.document(channels.id).set(channelModel.toHashMap())
+    })
+
+    fun getChannel(id: String) = execute(Runnable {
+        val channels: CollectionReference = db.collection("channels")
+        channels.document("id").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                val channelModel = ChannelModel()
+                channelModel.fromHashMap(it.result.data)
             }
         }
     })
