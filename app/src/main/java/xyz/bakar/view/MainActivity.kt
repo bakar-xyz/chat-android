@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         uiCommon = UiCommon(this)
         Handler().postDelayed({
             startSignIn(Arrays.asList(
-//                    AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                    AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                     AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
             ))
         },Constants.SHORT_DELAY_TIME)
