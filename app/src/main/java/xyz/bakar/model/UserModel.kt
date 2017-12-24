@@ -13,17 +13,11 @@ class UserModel() : BaseParcelable() {
     var name = ""
     var handle = ""
     var email = ""
-    var accessLevel = AccessLevel.USER
+    var accessLevel = AccessLevel.OWNER
     var image = ""
     var joiningDateTime = 0L
     var active = false
     var phoneNumber = ""
-
-    object AccessLevel {
-        const val OWNER = "owner"
-        const val MANAGER = "manager"
-        const val USER = "user"
-    }
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
@@ -78,7 +72,7 @@ class UserModel() : BaseParcelable() {
         name = map["name"] as String? ?: ""
         handle = map["handle"] as String? ?: ""
         email = map["email"] as String? ?: ""
-        accessLevel = map["accessLevel"] as String? ?: AccessLevel.USER
+        accessLevel = map["accessLevel"] as String? ?: AccessLevel.OWNER
         image = map["image"] as String? ?: ""
         joiningDateTime = map["joiningDateTime"] as Long? ?: 0L
         active = map["active"] as Boolean? ?: false
@@ -86,7 +80,7 @@ class UserModel() : BaseParcelable() {
         return this
     }
 
-    fun fromCurrentUser(currentUser: FirebaseUser?, handle: String = "", accessLevel: String = AccessLevel.USER, active: Boolean = false): UserModel {
+    fun fromCurrentUser(currentUser: FirebaseUser?, handle: String = "", accessLevel: String = AccessLevel.OWNER, active: Boolean = false): UserModel {
         this.id = currentUser?.uid ?: ""
         this.name = currentUser?.displayName ?: ""
         this.handle = handle

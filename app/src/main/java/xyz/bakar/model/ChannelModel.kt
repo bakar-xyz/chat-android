@@ -6,7 +6,7 @@ package xyz.bakar.model
 class ChannelModel {
     var id = ""
     var name = ""
-    var userAccess = HashMap<String,String>()
+    var userAccess = HashMap<String, String>()
     var purpose = ""
     var type = Type.PUBLIC
     var origin = OriginModel()
@@ -17,19 +17,25 @@ class ChannelModel {
         const val HIDDEN = "hidden"
     }
 
-    object AccessLevel {
-        const val READ = "read"
-        const val WRITE = "write"
-        const val INVITE = "invite"
-        const val REMOVE = "remove"
-        const val MANAGE = "manage_access_level"
+    fun toHashMap(): HashMap<String, Any> {
+        var map = HashMap<String, Any>()
+        map.put("id", id)
+        map.put("name", name)
+        map.put("userAccess", userAccess)
+        map.put("purpose", purpose)
+        map.put("type", type)
+        map.put("createdBy", origin.createdBy)
+        map.put("createdAt", origin.createdAt)
+        return map
     }
 
-    fun toHashMap(): HashMap<String,Any> {
-        return HashMap()
-    }
-
-    fun fromHashMap(): ChannelModel {
+    fun fromHashMap(map: HashMap<String, Any>): ChannelModel {
+        this.id = map["id"] as String? ?: ""
+        this.name = map["name"] as String? ?: ""
+        this.userAccess = map["userAccess"] as HashMap<String, String>? ?: HashMap()
+        this.purpose = map["purpose"] as String? ?: ""
+        this.type = map["type"] as String? ?: Type.PUBLIC
+        this.origin = OriginModel(map["createdAt"] as Long? ?: 0L, map["createdBy"] as String? ?: "")
         return this
     }
 }
