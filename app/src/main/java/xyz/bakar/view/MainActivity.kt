@@ -1,4 +1,4 @@
-package xyz.bakar
+package xyz.bakar.view
 
 import android.app.Activity
 import android.content.Intent
@@ -11,11 +11,15 @@ import android.view.View
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
-import xyz.bakar.custom.UiCommon
+import xyz.bakar.BuildConfig
+import xyz.bakar.FirebaseExecutor
+import xyz.bakar.R
+import xyz.bakar.app.BApplication
 import xyz.bakar.custom.Constants
+import xyz.bakar.custom.UiCommon
 import xyz.bakar.databinding.ActivityMainBinding
-import java.util.Arrays
+import xyz.bakar.model.UserModel
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,10 +34,15 @@ class MainActivity : AppCompatActivity() {
         uiCommon = UiCommon(this)
         Handler().postDelayed({
             startSignIn(Arrays.asList(
-                    AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+//                    AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                     AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
             ))
         },Constants.SHORT_DELAY_TIME)
+    }
+
+    private fun onLoginSuccess() {
+        FirebaseExecutor().addUser(UserModel().fromCurrentUser(BApplication.mAuth.currentUser))
+        binding.tagline.text = (getString(R.string.success_sign_in) + " " + BApplication.mAuth.currentUser?.displayName)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -43,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             Constants.RC_SIGN_IN -> {
                 val response: IdpResponse? = IdpResponse.fromResultIntent(data)
                 when (resultCode) {
-                    Activity.RESULT_OK -> binding.tagline.text = (getString(R.string.success_sign_in) + " " + FirebaseAuth.getInstance().currentUser?.displayName)
+                    Activity.RESULT_OK -> onLoginSuccess()
                     else -> {
                         binding.tagline.setTextColor(Color.RED)
                         binding.tagline.text = getString(when {

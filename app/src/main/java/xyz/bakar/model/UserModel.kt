@@ -2,49 +2,45 @@ package xyz.bakar.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import xyz.bakar.custom.BParcelable
+import com.google.firebase.auth.FirebaseUser
+import xyz.bakar.base.BaseParcelable
+import xyz.bakar.custom.Constants
 
 /**
  * Created by kalapuneet on 23-12-2017.
  */
-class UserModel() : BParcelable() {
+class UserModel() : BaseParcelable() {
     var id: String = ""
+    var name: String = ""
     var handle: String = ""
-    var accessLevel: String = ""
-    var profileImageUrl: String = ""
-    var joiningDateTime: String = ""
-    var dateOfBirth: String = ""
-    var location: String = ""
+    var email: String = ""
+    var accessLevel: String = Constants.ACCESS_LEVEL_USER
+    var image: String = ""
+    var joiningDateTime: Long = 0L
     var active: Boolean = false
-    var firstName: String = ""
-    var lastName: String = ""
     var phoneNumber: String = ""
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
+        name = parcel.readString()
         handle = parcel.readString()
+        email = parcel.readString()
         accessLevel = parcel.readString()
-        profileImageUrl = parcel.readString()
-        joiningDateTime = parcel.readString()
-        dateOfBirth = parcel.readString()
-        location = parcel.readString()
+        image = parcel.readString()
+        joiningDateTime = parcel.readLong()
         active = parcel.readByte() != 0.toByte()
-        firstName = parcel.readString()
-        lastName = parcel.readString()
         phoneNumber = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
+        parcel.writeString(name)
         parcel.writeString(handle)
+        parcel.writeString(email)
         parcel.writeString(accessLevel)
-        parcel.writeString(profileImageUrl)
-        parcel.writeString(joiningDateTime)
-        parcel.writeString(dateOfBirth)
-        parcel.writeString(location)
+        parcel.writeString(image)
+        parcel.writeLong(joiningDateTime)
         parcel.writeByte(if (active) 1 else 0)
-        parcel.writeString(firstName)
-        parcel.writeString(lastName)
         parcel.writeString(phoneNumber)
     }
 
@@ -56,5 +52,45 @@ class UserModel() : BParcelable() {
         override fun newArray(size: Int): Array<UserModel?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun toHashMap(): HashMap<String,Any> {
+        val map = HashMap<String,Any>()
+        map.put("id",id)
+        map.put("name",name)
+        map.put("handle",handle)
+        map.put("email",email)
+        map.put("accessLevel",accessLevel)
+        map.put("image",image)
+        map.put("joiningDateTime",joiningDateTime)
+        map.put("active",active)
+        map.put("phoneNumber",phoneNumber)
+        return map
+    }
+
+    fun fromHashMap(map: MutableMap<String, Any>): UserModel {
+        id = map["id"] as String? ?: ""
+        name = map["name"] as String? ?: ""
+        handle = map["handle"] as String? ?: ""
+        email = map["email"] as String? ?: ""
+        accessLevel = map["accessLevel"] as String? ?: Constants.ACCESS_LEVEL_USER
+        image = map["image"] as String? ?: ""
+        joiningDateTime = map["joiningDateTime"] as Long? ?: 0L
+        active = map["active"] as Boolean? ?: false
+        phoneNumber = map["phoneNumber"] as String? ?: ""
+        return this
+    }
+
+    fun fromCurrentUser(currentUser: FirebaseUser?, handle: String = "", accessLevel: String = Constants.ACCESS_LEVEL_USER, active: Boolean = false): UserModel {
+        this.id = currentUser?.uid ?: ""
+        this.name = currentUser?.displayName ?: ""
+        this.handle = handle
+        this.email = currentUser?.email ?: ""
+        this.accessLevel = accessLevel
+        this.image = currentUser?.photoUrl?.path ?: ""
+        this.joiningDateTime = currentUser?.metadata?.creationTimestamp ?: 0L
+        this.active = active
+        this.phoneNumber = currentUser?.phoneNumber ?: ""
+        return this
     }
 }
