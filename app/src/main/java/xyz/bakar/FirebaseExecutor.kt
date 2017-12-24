@@ -37,7 +37,7 @@ class FirebaseExecutor: BaseExecutor() {
 
     fun getChannel(id: String) = execute(Runnable {
         val channels: CollectionReference = db.collection("channels")
-        channels.document("id").get().addOnCompleteListener {
+        channels.document(id).get().addOnCompleteListener {
             if (it.isSuccessful) {
                 val channelModel = ChannelModel()
                 channelModel.fromHashMap(it.result.data)
