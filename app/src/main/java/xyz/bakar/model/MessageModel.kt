@@ -18,6 +18,7 @@ class MessageModel() : BaseParcelable() {
     var metaData = ""
     var session = ""
     var spam = false
+    var content = ""
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
@@ -30,6 +31,7 @@ class MessageModel() : BaseParcelable() {
         metaData = parcel.readString()
         session = parcel.readString()
         spam = parcel.readByte() != 0.toByte()
+        content = parcel.readString()
     }
 
     object Type {
@@ -62,6 +64,7 @@ class MessageModel() : BaseParcelable() {
         parcel.writeString(metaData)
         parcel.writeString(session)
         parcel.writeByte(if (spam) 1 else 0)
+        parcel.writeString(content)
     }
 
     companion object CREATOR : Parcelable.Creator<MessageModel> {
@@ -87,6 +90,7 @@ class MessageModel() : BaseParcelable() {
         map.put("metaData",metaData)
         map.put("session",session)
         map.put("spam",spam)
+        map.put("content",content)
         return map
     }
 
@@ -101,6 +105,7 @@ class MessageModel() : BaseParcelable() {
         metaData = map["metaData"] as String? ?: ""
         session = map["session"] as String? ?: ""
         spam = map["spam"] as Boolean? ?: false
+        content = map["content"] as String? ?: ""
         return this
     }
 }

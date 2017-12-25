@@ -12,7 +12,7 @@ class TopicModel() : BaseParcelable() {
     var title = ""
     var origin = OriginModel()
     var lastUpdatedAt = 0L
-    var status = STATUS.OPEN
+    var status = Status.OPEN
     var pinned = false
 
     constructor(parcel: Parcel) : this() {
@@ -24,7 +24,7 @@ class TopicModel() : BaseParcelable() {
         pinned = parcel.readByte() != 0.toByte()
     }
 
-    object STATUS {
+    object Status {
         const val OPEN = "open"
         const val CLOSED = "closed"
         const val ARCHIVED = "archived"
