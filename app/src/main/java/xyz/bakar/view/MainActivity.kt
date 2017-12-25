@@ -12,7 +12,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import xyz.bakar.BuildConfig
-import xyz.bakar.FirebaseExecutor
+import xyz.bakar.network.FirebaseExecutor
 import xyz.bakar.R
 import xyz.bakar.app.BApplication
 import xyz.bakar.custom.Constants
