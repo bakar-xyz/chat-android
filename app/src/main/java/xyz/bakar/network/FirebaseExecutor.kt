@@ -29,7 +29,7 @@ class FirebaseExecutor: BaseExecutor() {
         users.document(userModel.id).set(userModel.toHashMap())
     })
 
-    fun readUser(id: String) = execute(Runnable {
+    fun getUser(id: String) = execute(Runnable {
         val users = usersCollection()
         users.document(id).get().addOnCompleteListener {
             if (it.isSuccessful) {
