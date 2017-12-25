@@ -73,4 +73,34 @@ class MessageModel() : BaseParcelable() {
             return arrayOfNulls(size)
         }
     }
+
+    fun toHashMap(): HashMap<String,Any> {
+        val map = HashMap<String,Any>()
+        map.put("id",id)
+        map.put("parentId",parentId)
+        map.put("isEdited",isEdited)
+        map.put("type",type)
+        map.put("from",from)
+        map.put("createdAt",origin.createdAt)
+        map.put("createdBy",origin.createdBy)
+        map.put("status",status)
+        map.put("metaData",metaData)
+        map.put("session",session)
+        map.put("spam",spam)
+        return map
+    }
+
+    fun fromHashMap(map: MutableMap<String,Any>): MessageModel {
+        id = map["id"] as String? ?: ""
+        parentId = map["parentId"] as String? ?: ""
+        isEdited = map["isEdited"] as Boolean? ?: false
+        type = map["type"] as String? ?: ""
+        from = map["from"] as String? ?: ""
+        origin = OriginModel(map["createdAt"] as Long? ?:  0L, map["createdBy"] as String? ?: "")
+        status = map["status"] as String? ?: ""
+        metaData = map["metaData"] as String? ?: ""
+        session = map["session"] as String? ?: ""
+        spam = map["spam"] as Boolean? ?: false
+        return this
+    }
 }

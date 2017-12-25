@@ -1,41 +1,39 @@
 package xyz.bakar.model
 
-import android.os.Parcel
-import android.os.Parcelable
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
+import android.telephony.TelephonyManager
 import xyz.bakar.BuildConfig
-import xyz.bakar.base.BaseParcelable
 
 /**
  * Created by kalapuneet on 24-12-2017.
  */
-class InfoModel() : BaseParcelable() {
+class InfoModel(val context: Context) {
     val platform = "ANDROID"
     val appVersion = BuildConfig.VERSION_NAME
-    var deviceModel = ""
-    var imei = ""
-    var osVersion = ""
+    val deviceModel = Build.MANUFACTURER + " " + Build.MODEL
+    @SuppressLint("MissingPermission")
+    val imei = (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).deviceId
+    val osVersion = Build.VERSION.RELEASE
     var location = HashMap<String,Any>()
     var notifications = Any()
 
-    constructor(parcel: Parcel) : this() {
-        deviceModel = parcel.readString()
-        imei = parcel.readString()
-        osVersion = parcel.readString()
+    fun toHashMap(): HashMap<String,Any> {
+        val map = HashMap<String,Any>()
+        map.put("platform",platform)
+        map.put("appVersion",appVersion)
+        map.put("deviceModel",deviceModel)
+        map.put("imei",imei)
+        map.put("osVersion",osVersion)
+        map.put("location",location)
+        map.put("notifications",notifications)
+        return map
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(deviceModel)
-        parcel.writeString(imei)
-        parcel.writeString(osVersion)
-    }
-
-    companion object CREATOR : Parcelable.Creator<InfoModel> {
-        override fun createFromParcel(parcel: Parcel): InfoModel {
-            return InfoModel(parcel)
-        }
-
-        override fun newArray(size: Int): Array<InfoModel?> {
-            return arrayOfNulls(size)
-        }
+    fun fromHashMap(map:MutableMap<String,Any>): InfoModel {
+        location = map["location"] as HashMap<String, Any>? ?: HashMap()
+        notifications = map["notifications"] ?: Any()
+        return this
     }
 }
